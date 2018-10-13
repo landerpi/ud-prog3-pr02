@@ -3,6 +3,7 @@ package ud.prog3.pr02;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.*;
+import java.lang.reflect.Array;
 
 import javax.swing.*;
 
@@ -17,6 +18,7 @@ public class VentanaJuego extends JFrame {
 	MundoJuego miMundo;        // Mundo del juego
 	CocheJuego miCoche;        // Coche del juego
 	MiRunnable miHilo = null;  // Hilo del bucle principal de juego	
+	boolean[] teclas = new boolean[4];
 
 	/** Constructor de la ventana de juego. Crea y devuelve la ventana inicializada
 	 * sin coches dentro
@@ -80,21 +82,46 @@ public class VentanaJuego extends JFrame {
 			public void keyPressed(KeyEvent e) {
 				switch (e.getKeyCode()) {
 					case KeyEvent.VK_UP: {
-						miCoche.acelera( +5, 1 );
+						teclas[0]=true;
+						
 						break;
 					}
 					case KeyEvent.VK_DOWN: {
-						miCoche.acelera( -5, 1 );
+						teclas[1]=true;
+						
 						break;
 					}
 					case KeyEvent.VK_LEFT: {
-						miCoche.gira( +10 );
+						teclas[2]=true;
+						
 						break;
 					}
 					case KeyEvent.VK_RIGHT: {
-						miCoche.gira( -10 );
+						teclas[3]=true;
+						
 						break;
 					}
+				}
+			}
+			public void keyReleased(KeyEvent e){
+				switch(e.getKeyCode()){
+				case KeyEvent.VK_UP:{
+					teclas[0]=false;
+					break;
+				}
+				case KeyEvent.VK_DOWN:{
+					teclas[1]=false;
+					break;
+				}
+				case KeyEvent.VK_LEFT:{
+					teclas[2]=false;
+					break;
+				}
+				case KeyEvent.VK_RIGHT:{
+					teclas[3]=false;
+					break;
+				}
+				
 				}
 			}
 		});
@@ -159,6 +186,20 @@ public class VentanaJuego extends JFrame {
 					miMundo.rebotaHorizontal(miCoche);
 				if (miMundo.hayChoqueVertical(miCoche)) // Espejo vertical si choca en Y
 					miMundo.rebotaVertical(miCoche);
+				//chequear teclas pulsadas
+				if (teclas[0]==true){ 
+				miCoche.acelera( +5, 1 );
+				}				
+				if (teclas[1]==true){ 
+				miCoche.acelera( -5, 1 );
+				}
+				if (teclas[2]==true){
+				miCoche.gira( +10 );
+				}
+		        if(teclas[3]==true){
+				miCoche.gira( -10 );
+		        }
+				
 				// Dormir el hilo 40 milisegundos
 				try {
 					Thread.sleep( 40 );
